@@ -111,29 +111,3 @@ WHERE "foods"."id" = 1;
 		
 
 
-UPDATE "foods"
-SET "daily_amount_unit" = 
- (CASE WHEN "cal_per_unit" IS NOT NULL THEN 
-	(
-		(SELECT CASE WHEN "foods"."type" = 'wet'  THEN (SELECT "cats"."food_cal"*"cats"."wet_percentage"*0.01/"foods"."cal_per_unit" FROM "cats" JOIN "cats_foods" ON "cats"."id" = "cats_foods"."cat_id"  JOIN "foods" ON "foods"."id" = "cats_foods"."food_id" WHERE "foods"."id" =1) 
-	 				 WHEN "foods"."type" = 'dry' THEN (SELECT "cats"."food_cal"*(100-"cats"."wet_percentage")*0.01/"foods"."cal_per_unit" FROM "cats" JOIN "cats_foods" ON "cats"."id" = "cats_foods"."cat_id"  JOIN "foods" ON "foods"."id" = "cats_foods"."food_id" WHERE "foods"."id" =1) 	
-	    END) 
-	 ) 
-	 
-	 WHEN "cal_per_unit" IS NULL THEN 0
-	   
-        END),
-	 
-"daily_amount_oz" = 
- (CASE WHEN "cal_per_kg" IS NOT NULL THEN 
-	(
-		(SELECT CASE WHEN "foods"."type" = 'wet'  THEN (SELECT "cats"."food_cal"*"cats"."wet_percentage"*0.01/("foods"."cal_per_kg"/35.274) FROM "cats" JOIN "cats_foods" ON "cats"."id" = "cats_foods"."cat_id"  JOIN "foods" ON "foods"."id" = "cats_foods"."food_id" WHERE "foods"."id" =1) 
-	     	         WHEN "foods"."type" = 'dry' THEN (SELECT "cats"."food_cal"*(100-"cats"."wet_percentage")*0.01/("foods"."cal_per_kg"/35.274) FROM "cats" JOIN "cats_foods" ON "cats"."id" = "cats_foods"."cat_id"  JOIN "foods" ON "foods"."id" = "cats_foods"."food_id" WHERE "foods"."id" =1) 	
-	     END)
-	  ) 
-	  
-	  WHEN "cal_per_kg" IS NULL THEN 0
-	    
-	     END)
-WHERE "foods"."id" = 1;
-
